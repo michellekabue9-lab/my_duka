@@ -17,8 +17,10 @@ class bank_account:
 
     def display_info(self):
         print(f"account_number:{self.account_number} ,balance:{self.balance} ,owner_name:{self.owner_name} ,date_opened{self.date_opened}")
-        print('___bank_Details___')
-        print('______________________________________')
+        
+    def close_account(self):
+      print(f"Account {self.account_number} has been closed.")
+      print("--------------------------------------------------------------")
 
 # Student1=Student("Jack",20,"s001","Computer")
 # print(type(Student1))
@@ -34,6 +36,7 @@ print(bank_account1)
 bank_account1.deposit(100000)
 bank_account1.withdraw(60000)
 bank_account1.check_balance()
+bank_account1.close_account()
 
 
 bank_account2=bank_account(101,60000,"Jack","12-06-2025")
@@ -42,6 +45,7 @@ print(bank_account1)
 bank_account2.deposit(120000)
 bank_account2.withdraw(60000)
 bank_account2.check_balance()
+bank_account2.close_account()
 
 
 
