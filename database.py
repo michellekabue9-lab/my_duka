@@ -1,71 +1,100 @@
 import psycopg2
+conn=psycopg2.connect(
+    host="localhost",
+    database="myduka",
+    user="postgres",
+    password="michaelkabue@123"
+)    
+#cur=conn.cursor()
+#cur.execute("Select * from products")
+#rows=cur.fetchall()
+#for row in rows:
+ #   print(row)
+#cur.close()
+#conn.close()
 
-#establishing a new connection to a postgres db
-conn=psycopg2.connect(host='localhost',port=5432,user='postgres',password='michaelkabue@123',dbname='myduka')
+#cur.execute("""
+#Select table_name
+#from information_schema.tables 
+#where table_schema='public'
+#""")
+#for table in cur.fetchall():
+ #   print(table)
 
-#cur object for db opperations
-cur=conn.cursor()
-
-cur.execute("select * from products")
-products_data=cur.fetchall()
-print(products_data)
-
-cur.execute("select * from sales")
-sales_data=cur.fetchall()
-print(sales_data)
-
-cur.execute("insert into products(name,buying_price,selling_price)values('coat',400,300)")
-conn.commit()
-print(products_data)
-
-def insert_products(values):
-    cur.execute(f"insert into products(name,buying_price,selling_price)values{values}")
-    conn.commit()
-
-products1=('Sumsung,phone',30000,40000)
-products2=('LG,TV',50000,60000)
-
-insert_products(products1)
-insert_products(products2)
-
-def insert_products2(values):
-    cur.execute(f"insert into products(name,buying_price,selling_price)values(%s,%s,%s)",values)
-    conn.commit()
-
-product3=('book',1200,1300)
-insert_products2(product3)
+curr = conn.cursor()
 
 def get_products():
-    cur.execute("select * from products")
-    products_data=cur.fetchall()
-    return products_data
-
-sales per day select date(sales.created_at)as date,sum(sum.quantity*products.selling_price)as total_sales 
-from sales join ptoducts on products.pid=sales.pid group by date;
-
-def insert_sales(values):
-    cur.execute(f"insert into sales(pid,quantity)values{values}")
-    con.commit()
-
-sales1=(5,33)
-sales2=(4,32)
-
-insert_sales(sales1)
-insert_sales(sales2)
-
-print(sales_data)
+  curr.execute('Select * from products')
+  products_data = curr.fetchall()
+  return products_data
 
 def get_stock():
-    cur.execute("select * from stock")
-    stock_data=cur.fetchall()
+    curr.execute("Select * from stock")
+    stock_data = curr.fetchall()
     return stock_data
 
+def get_sales():
+    curr.execute("select * from sales")
+    sales_data = curr.fetchall()
+    return sales_data
+
+# curr.execute("Insert into products(name, buying_price, selling_price) values('fridge',89000,102000)")
+# conn.commit()
+# print(products_data)
+
+product1 = ('samsung phone', 30000, 40000)
+product2 = ('LG Microwave', 50000,60000)
+
+
+#insert_products(product1)
+#insert_products(product2)
+
+def insert_products2(values):
+    curr.execute("insert into products(name, buying_price,selling_price)values(%s,%s,%s)", values)
+    conn.commit()
+
+product3 = ('books',1200,1300)
+insert_products2(product3)
+
 def insert_stock(values):
-    cur.execute(f"insert into stock(pid,stock_quantity)values{values}")
-    con,commit()
+    curr.execute("insert into stock(pid,stock_quantity) values(%s,%s)",values)
+    conn.commit()
 
-stock1=(45,78)
-stock2=(98,44)
+def insert_sales(values):
+    curr.execute("insert into sales(pid, quantity) values(%s,%s)", values)
+    conn.commit()
 
+
+stock1 = (1,67,)
 insert_stock(stock1)
+stock2=(2,35)
 insert_stock(stock2)
+
+sale1 = (1, 45,)
+insert_sales(sale1)
+sale2=(2,35)
+insert_sales(sale2)
+
+def sales_per_day():
+    curr.execute("""
+         select date(sales.created_at) as date , sum(sales.quantity * products.buying_price) as total_sales from sales 
+        join products on products.id = sales.pid group by date;
+    """)
+    daily_sales=curr.fetchall()
+    return daily_sales
+
+def profit_per_day():
+    curr.execute("""
+         select date(sales.created_at) as date, sum(sales.quantity * (products.selling_price - products.buying_price))
+         as profit from products join sales on sales.pid = products.id group by date;
+     """)
+    daily_profit=curr.fetchall()
+    return daily_profit
+
+def sales_per_products():
+    curr.execute("""
+         select products.name as p_name , sum(sales.quantity * products.buying_price) 
+         as total_sales from sales join products on products.id = sales.pid group by p_name;
+     """)
+    product_sales=curr.fetchall()
+    return product_sales
