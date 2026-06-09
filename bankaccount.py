@@ -1,5 +1,5 @@
-class bank_account:
-    def __init__(self,account_number,balance,owner_name,date_opened):
+class Bank_account:
+    def __init__(self,account_number,balance,owner_name,date_opened='today'):
         self.account_number=account_number
         self.balance=balance
         self.owner_name=owner_name
@@ -22,13 +22,15 @@ class bank_account:
     def display_info(self):
         print(f"account_number:{self.account_number} ,balance:{self.balance} ,owner_name:{self.owner_name} ,date_opened{self.date_opened}")
         
-    def close_account(self):
-      print(f"Account {self.account_number} has been closed.")
-      print("--------------------------------------------------------------")
+    def close_account(self,Bank_account,account_number):
+        del Bank_account
+        print(f"Account {"Bank_account"} has been deleted.")
+    print('------------------------------------------')
+    
 
 
 
-bank_account1=bank_account(100,40000,"Jack","12-06-2025")
+bank_account1=Bank_account(100,40000,"Jack",)
 print(type(bank_account1))
 print(bank_account1)
 bank_account1.deposit(100000)
@@ -37,7 +39,7 @@ bank_account1.check_balance()
 bank_account1.close_account()
 
 
-bank_account2=bank_account(101,60000,"Juma","11-06-2025")
+bank_account2=Bank_account(101,60000,"Juma",)
 print(type(bank_account2))
 print(bank_account1)
 bank_account2.deposit(120000)
