@@ -22,7 +22,7 @@ class Bank_account:
     def display_info(self):
         print(f"account_number:{self.account_number} ,balance:{self.balance} ,owner_name:{self.owner_name} ,date_opened{self.date_opened}")
         
-    def close_account(self,Bank_account,account_number):
+    def close_account(self):
         del Bank_account
         print(f"Account {"Bank_account"} has been deleted.")
     print('------------------------------------------')
